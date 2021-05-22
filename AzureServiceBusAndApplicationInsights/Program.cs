@@ -35,7 +35,10 @@ namespace AzureServiceBusAndApplicationInsights
                     });
                     services.AddApplicationInsightsTelemetryProcessor<CustomTelemetryProcessor>();
                     
-                    services.AddSingleton<ISubscriptionClient>(new SubscriptionClient(hostContext.Configuration.GetValue<string>("AzureASBConnString"), "watch-for-items", "watcher1"));
+                    services.AddSingleton<ISubscriptionClient>(new SubscriptionClient(
+                        hostContext.Configuration.GetValue<string>("AzureServiceBus_ConnectionString"), 
+                        hostContext.Configuration.GetValue<string>("AzureServiceBus_TopicName"), 
+                        hostContext.Configuration.GetValue<string>("AzureServiceBus_SubscriptionName")));
                     
                     services.AddHostedService<Worker>();
                 })

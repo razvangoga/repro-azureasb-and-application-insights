@@ -19,7 +19,7 @@ namespace AzureServiceBusAndApplicationInsights
         {
             if (item is DependencyTelemetry telemetry)
             {
-                Console.WriteLine($"{telemetry.Type} dependency at: {DateTimeOffset.Now}");
+                Console.WriteLine($"===> Dependency log : {telemetry.Type} dependency at: {DateTimeOffset.Now:o}");
             }
             
             this._next.Process(item);
