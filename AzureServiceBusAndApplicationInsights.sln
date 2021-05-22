@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureServiceBusAndApplicationInsights", "AzureServiceBusAndApplicationInsights\AzureServiceBusAndApplicationInsights.csproj", "{D096AE8A-4718-49BF-81F7-7F85553CA343}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EF3BED4A-0007-45F0-B8FF-9F60E8CD5F4A}"
+ProjectSection(SolutionItems) = preProject
+	.gitignore = .gitignore
+	README.md = README.md
+EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D096AE8A-4718-49BF-81F7-7F85553CA343}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D096AE8A-4718-49BF-81F7-7F85553CA343}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D096AE8A-4718-49BF-81F7-7F85553CA343}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D096AE8A-4718-49BF-81F7-7F85553CA343}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
