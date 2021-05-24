@@ -12,5 +12,7 @@ In **appsettings.json**
 - add your Application Insights instrumentation key
 - add an ASB connection string, topic name and subscription name
 
-Run the project (requires netcore 3.1)
+Run one of the projects (requires netcore 3.1)
+1. **AzureServiceBusAndApplicationInsights** uses the old style SDK **Microsoft.Azure.ServiceBus v5.1.3**
+2. **AzureServiceBusAndApplicationInsights.NewSdk** uses the new style SDK **Azure.Messaging.ServiceBus v7.1.2**
 
