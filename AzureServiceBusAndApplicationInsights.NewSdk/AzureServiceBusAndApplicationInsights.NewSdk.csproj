@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UserSecretsId>dotnet-AzureServiceBusAndApplicationInsights.NewSdk-39EBFEB5-5DC6-43BC-A223-D314D7271C87</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.1.2" />
+        <PackageReference Include="Microsoft.ApplicationInsights" Version="2.17.0" />
+        <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.17.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.15" />
+    </ItemGroup>
+</Project>

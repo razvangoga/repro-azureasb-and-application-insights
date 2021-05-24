@@ -1,11 +1,11 @@
 using System.Diagnostics;
-using Microsoft.Azure.ServiceBus;
+using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace AzureServiceBusAndApplicationInsights
+namespace AzureServiceBusAndApplicationInsights.NewSdk
 {
     public class Program
     {
@@ -31,10 +31,19 @@ namespace AzureServiceBusAndApplicationInsights
                     });
                     services.AddApplicationInsightsTelemetryProcessor<CustomTelemetryProcessor>();
                     
-                    services.AddSingleton<ISubscriptionClient>(new SubscriptionClient(
-                        hostContext.Configuration.GetValue<string>("AzureServiceBus_ConnectionString"), 
-                        hostContext.Configuration.GetValue<string>("AzureServiceBus_TopicName"), 
-                        hostContext.Configuration.GetValue<string>("AzureServiceBus_SubscriptionName")));
+                    services.AddSingleton<ServiceBusProcessor>(_ =>
+                    {
+                        ServiceBusClient client = new ServiceBusClient(hostContext.Configuration.GetValue<string>("AzureServiceBus_ConnectionString"));
+                        ServiceBusProcessor processor = client.CreateProcessor(
+                            hostContext.Configuration.GetValue<string>("AzureServiceBus_TopicName"), 
+                            hostContext.Configuration.GetValue<string>("AzureServiceBus_SubscriptionName"), 
+                            new ServiceBusProcessorOptions()
+                            {
+                                AutoCompleteMessages = false,
+                                MaxConcurrentCalls = hostContext.Configuration.GetValue<int>("AzureServiceBus_MaxConcurrentCalls")
+                            });
+                        return processor;
+                    });
                     
                     services.AddHostedService<Worker>();
                 })

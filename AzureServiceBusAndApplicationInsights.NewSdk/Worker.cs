@@ -1,41 +1,43 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Azure.ServiceBus;
+using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace AzureServiceBusAndApplicationInsights
+namespace AzureServiceBusAndApplicationInsights.NewSdk
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly ISubscriptionClient _subscriptionClient;
+        private readonly ServiceBusProcessor _processor;
 
-        public Worker(ILogger<Worker> logger, ISubscriptionClient subscriptionClient, IConfiguration configuration)
+        public Worker(ILogger<Worker> logger, IConfiguration configuration, ServiceBusProcessor processor)
         {
             this._logger = logger;
-            this._subscriptionClient = subscriptionClient;
+            this._processor = processor;
+            this._processor.ProcessMessageAsync += ProcessorOnProcessMessageAsync;
+            this._processor.ProcessErrorAsync += ProcessorOnProcessErrorAsync;
+            
             int maxConcurrentCalls = configuration.GetValue<int>("AzureServiceBus_MaxConcurrentCalls");
-            this._subscriptionClient.RegisterMessageHandler(this.MessageHandler, new MessageHandlerOptions(this.MessageErrorHandler)
-            {
-                MaxConcurrentCalls = maxConcurrentCalls,
-                AutoComplete = false
-            });
             this._logger.LogInformation($"Starting subscription client with MaxConcurrentCalls={maxConcurrentCalls}{Environment.NewLine}We should see {maxConcurrentCalls} Application Insights asb related dependencies logged every minute");
         }
-        
-        private async Task MessageHandler(Message message, CancellationToken cancellationToken)
+
+        private Task ProcessorOnProcessErrorAsync(ProcessErrorEventArgs arg)
         {
-            await this._subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
-            this._logger.LogInformation($"Message {message.MessageId} {message.Label} arrived");
+            this._logger.LogError(arg.Exception, "message handling failed");
+            return Task.CompletedTask;
         }
 
-        private Task MessageErrorHandler(ExceptionReceivedEventArgs arg)
+        private async Task ProcessorOnProcessMessageAsync(ProcessMessageEventArgs arg)
         {
-            this._logger.LogError(arg.Exception,"Message reception failed");
-            return Task.CompletedTask;
+            await arg.CompleteMessageAsync(arg.Message);
+        }
+
+        public override async Task StartAsync(CancellationToken cancellationToken)
+        {
+            await this._processor.StartProcessingAsync(cancellationToken);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

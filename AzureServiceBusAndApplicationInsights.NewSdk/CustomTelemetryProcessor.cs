@@ -3,7 +3,7 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 
-namespace AzureServiceBusAndApplicationInsights
+namespace AzureServiceBusAndApplicationInsights.NewSdk
 {
     public class CustomTelemetryProcessor : ITelemetryProcessor
     {
@@ -18,8 +18,7 @@ namespace AzureServiceBusAndApplicationInsights
         {
             if (item is DependencyTelemetry dt)
             {
-                dt.Properties.TryGetValue("MessageId", out string messageId);
-                Console.WriteLine($"===> Dependency log : {dt.Type}{(string.IsNullOrWhiteSpace(messageId) ? "" : " for message" + messageId)} at: {DateTimeOffset.Now:o}");
+                Console.WriteLine($"===> Dependency log : {dt.Type} at: {DateTimeOffset.Now:o}");
             }
 
             if (item is RequestTelemetry rt)
