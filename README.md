@@ -2,7 +2,7 @@
 
 Sandbox repro for a netcore 3.1 worker service that listens for messages from a Azure Service Bus subscription, while tracking telemetry with Azure Application Insights.
 
-The ASB SDK publishes once every minute a _heart-beat_ in Application Insights as a **Dependency**.
+The ASB SDK publishes once every minute a _heart-beat_ in Application Insights as a **Dependency** (for Microsoft.Azure.ServiceBus v5.1.3) or **Request** (Azure.Messaging.ServiceBus v7.1.2).
 
 If the subscription client's **MaxConcurrentCalls** is set above 1, the SDK _seems to publish **the number set to MaxConcurrentCalls** dependency hart-beats every minute_ 
 
