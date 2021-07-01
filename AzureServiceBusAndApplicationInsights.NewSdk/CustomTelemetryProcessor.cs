@@ -18,12 +18,16 @@ namespace AzureServiceBusAndApplicationInsights.NewSdk
         {
             if (item is DependencyTelemetry dt)
             {
-                Console.WriteLine($"===> Dependency log : {dt.Type} at: {DateTimeOffset.Now:o}");
+                //the new SDK does not have the MessageId property set
+                dt.Properties.TryGetValue("MessageId", out string messageId);
+                Console.WriteLine($"===> Dependency log : {dt.Type}{(string.IsNullOrWhiteSpace(messageId) ? "" : " for message" + messageId)} at: {DateTimeOffset.Now:o}");
             }
 
             if (item is RequestTelemetry rt)
             {
-                Console.WriteLine($"===> Request log : {rt.Name } at: {DateTimeOffset.Now:o}");
+                //the new SDK does not have the MessageId property set
+                rt.Properties.TryGetValue("MessageId", out string messageId);
+                Console.WriteLine($"===> Request log : {rt.Name }{(string.IsNullOrWhiteSpace(messageId) ? "" : " for message" + messageId)} at: {DateTimeOffset.Now:o}");
             }
             
             this._next.Process(item);
