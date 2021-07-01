@@ -18,6 +18,7 @@ namespace AzureServiceBusAndApplicationInsights
         {
             if (item is DependencyTelemetry dt)
             {
+                //the dependencies logged for actual messages have the MessageId property set - a filter may be based on this 
                 dt.Properties.TryGetValue("MessageId", out string messageId);
                 Console.WriteLine($"===> Dependency log : {dt.Type}{(string.IsNullOrWhiteSpace(messageId) ? "" : " for message" + messageId)} at: {DateTimeOffset.Now:o}");
             }
