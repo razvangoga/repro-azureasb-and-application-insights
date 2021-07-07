@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Azure.Messaging.ServiceBus;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,6 +31,7 @@ namespace AzureServiceBusAndApplicationInsights.NewSdk
                         o.DeveloperMode = true;
                     });
                     services.AddApplicationInsightsTelemetryProcessor<CustomTelemetryProcessor>();
+                    services.AddSingleton<ITelemetryInitializer, CustomTelemetryInitializer>();
                     
                     services.AddSingleton<ServiceBusProcessor>(_ =>
                     {

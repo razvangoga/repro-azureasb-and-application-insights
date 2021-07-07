@@ -34,18 +34,16 @@ namespace AzureServiceBusAndApplicationInsights.NewSdk
         {
             await arg.CompleteMessageAsync(arg.Message);
         }
-
-        public override async Task StartAsync(CancellationToken cancellationToken)
-        {
-            await this._processor.StartProcessingAsync(cancellationToken);
-        }
-
+        
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            this._logger.LogInformation($"Worker starting at: {DateTimeOffset.Now:O}");
+            await this._processor.StartProcessingAsync(stoppingToken);
+            
             while (!stoppingToken.IsCancellationRequested)
             {
                 this._logger.LogInformation($"Worker running at: {DateTimeOffset.Now:O}");
-                await Task.Delay(60 * 1000, stoppingToken);
+                await Task.Delay(10 * 1000, stoppingToken);
             }
         }
     }
